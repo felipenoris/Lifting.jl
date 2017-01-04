@@ -1,5 +1,7 @@
-# Tables.jl
-Yet another Table / DataFrame like Julia package.
+# Lifting.jl
+
+Provides `lift` and `unlift` functions for Julia
+
 ## Installation
 
 ```julia
