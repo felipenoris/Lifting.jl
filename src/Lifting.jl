@@ -3,11 +3,11 @@ __precompile__(true)
 module Lifting
 
 # lift types
-lift{T<:Nullable}(::Type{T}) = eltype(T)
-lift{T}(::Type{T}) = T
+lift(::Type{T}) where {T<:Nullable} = eltype(T)
+lift(::Type{T}) where {T} = T
 
 # lift values
-function lift{T<:Nullable}(x::T)
+function lift(x::T) where {T<:Nullable}
     @assert !isnull(x) "Cannot lift a null value."
     return get(x)
 end
@@ -15,21 +15,21 @@ end
 lift(x) = x
 
 # unlift types
-unlift{T<:Nullable}(::Type{T}) = T
-unlift{T}(::Type{T}) = Nullable{T}
+unlift(::Type{T}) where {T<:Nullable} = T
+unlift(::Type{T}) where {T} = Nullable{T}
 
 # unlift values
-unlift{T<:Nullable}(x::T) = x
-unlift{T}(x::T) = Nullable{T}(x)
+unlift(x::T) where {T<:Nullable} = x
+unlift(x::T) where {T} = Nullable{T}(x)
 
 # NullableArrays
 
 using NullableArrays
 
-lift{P,Q}(::Type{NullableArray{P,Q}}) = Array{P,Q}
-unlift{P,Q}(::Type{Array{P,Q}}) = NullableArray{P,Q}
+lift(::Type{NullableArray{P,Q}}) where {P,Q} = Array{P,Q}
+unlift(::Type{Array{P,Q}}) where {P,Q} = NullableArray{P,Q}
 
-function lift{T}(x::NullableVector{T})
+function lift(x::NullableVector{T}) where {T}
 	const LEN = length(x)
 	out = Vector{T}(LEN)
 	for i in 1:LEN
@@ -39,7 +39,7 @@ function lift{T}(x::NullableVector{T})
 	return out
 end
 
-unlift{T}(x::Vector{T}) = NullableArray(x)
+unlift(x::Vector{T}) where {T} = NullableArray(x)
 
 export lift, unlift
 
