@@ -2,6 +2,8 @@
 __precompile__(true)
 module Lifting
 
+@assert VERSION >= v"0.6.0" "Lifting.jl requires Julia v0.6.0 or newer."
+
 # lift types
 lift(::Type{T}) where {T<:Nullable} = eltype(T)
 lift(::Type{T}) where {T} = T
