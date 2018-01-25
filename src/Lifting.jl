@@ -30,7 +30,7 @@ lift{P,Q}(::Type{NullableArray{P,Q}}) = Array{P,Q}
 unlift{P,Q}(::Type{Array{P,Q}}) = NullableArray{P,Q}
 
 function lift{T}(x::NullableVector{T})
-	const LEN = length(x)
+	LEN = length(x)
 	out = Vector{T}(LEN)
 	for i in 1:LEN
 		@assert !isnull(x[i]) "Cannot lift a null value."
