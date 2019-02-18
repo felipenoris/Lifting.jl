@@ -1,4 +1,21 @@
 
+using Lifting, Test
+
+@test_throws AssertionError lift(Nothing)
+@test_throws AssertionError lift(Missing)
+@test lift(Int64) == Int64
+@test lift(AbstractString) == AbstractString
+@test lift(Union{Missing, Int64}) == Int64
+@test lift(Union{Int64, Missing}) == Int64
+@test lift(Union{Nothing, Int64}) == Int64
+@test lift(Union{Int64, Nothing}) == Int64
+@test lift(Union{Float64, Int64}) == Union{Float64, Int64}
+@test lift(Union{Int64, Float64, String}) == Union{Int64, Float64, String}
+@test lift(Union{Int64, Float64, Missing, String}) == Union{Int64, Float64, String}
+@test lift(Union{Nothing, Int64, Float64, String, Missing}) == Union{String, Int64, Float64}
+@test lift(Union{Nothing, Int64, Float64, String, Missing, Nothing}) == Union{String, Int64, Float64}
+
+#=
 using Base.Test
 using NullableArrays
 using Lifting
@@ -24,3 +41,4 @@ b = NullableArray([1,2,3])
 for i in 1:3
 	@test get(a[i] == b[i])
 end
+=#
